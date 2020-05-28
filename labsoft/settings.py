@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -78,7 +79,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'lab-software-proj',
-        'USER': 'phylippe',
+        'USER': 'postgres',
         'PASSWORD': 'admin',
         'HOST': 'localhost',
         'PORT': '5432',
@@ -123,3 +124,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# configurações de e-mail
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+"""
+EMAIL_HOST = 'localhost'
+EMAIL_HOST_USER = 'no-reply@seudominio.com.br'
+EMAIL_PORT = 587
+EMAIL_USER_TSL = True
+EMAIL_HOST_PASSWORD = 'sua-senha'
+"""

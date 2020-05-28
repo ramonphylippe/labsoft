@@ -5,7 +5,7 @@ from .models import Usuario, Produto
 
 @admin.register(Usuario)
 class UsuarioAdmin(admin.ModelAdmin):
-    list_display = ('usuarioNome', 'sobrenome', 'usuarioEmail', 'usuarioStatus')
+    list_display = ('usuarioNome', 'usuarioEmail', 'usuarioStatus')
 
 
 @admin.register(Produto)

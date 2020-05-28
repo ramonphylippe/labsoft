@@ -3,9 +3,7 @@ from django.db import models
 
 class Usuario(models.Model):
     usuarioNome = models.CharField('Nome', max_length=16, blank='false')
-    sobrenome = models.CharField('Sobrenome', max_length=16, blank='false')
-    cpf = models.CharField('CPF', max_length=11, unique='true')
-    contato1 = models.CharField('telefone - principal', max_length=12, blank='false')
+    telefone = models.CharField('telefone - principal', max_length=12, blank='false')
     cep = models.CharField('CEP', max_length=9, blank='false')
     usuarioEmail = models.EmailField('email', max_length=64, blank='false', unique='true')
     usuarioSenha = models.CharField('senha', max_length=32, blank='false')
