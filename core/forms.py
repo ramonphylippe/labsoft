@@ -1,27 +1,40 @@
 from django import forms
-from core.models import Produto, Usuario
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from core.models import Produto, UserProfile
 
 
-class UsuarioForm(forms.Form):
-    nome = forms.CharField(label='Nome', max_length=16)
-    telefone = forms.CharField(label='Contato', max_length=12)
-    cep = forms.CharField(label='Cep', max_length=9)
-    email = forms.CharField(label='email', max_length=64)
-    senha = forms.CharField(label='senha', max_length=32)
-
-
-class UsuarioModelForm(forms.ModelForm):
+class ExtendedUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+    first_name = forms.CharField(max_length=20)
+    last_name = forms.CharField(max_length=20)
 
     class Meta:
-        model = Usuario
-        fields = ['usuarioNome', 'telefone', 'cep', 'usuarioEmail', 'usuarioSenha', 'usuarioStatus']
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2')
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+
+        user.email = self.cleaned_data['email']
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+
+        if commit:
+            user.save()
+        return user
+
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ('telefone', 'cep')
 
 
 class ProdutoForm(forms.Form):
     vendedor = forms.CharField(label='idVendedor')
     nome = forms.CharField(label='nome')
     valor = forms.CharField(label='valor')
-    estoque = forms.CharField(label='estoque')
     status = forms.CharField(label='status')
 
 
@@ -29,4 +42,4 @@ class ProdutoModelForm(forms.ModelForm):
 
     class Meta:
         model = Produto
-        fields = ['vendedor', 'produtoNome', 'valor', 'estoque', 'produtoStatus']
+        fields = ['vendedor', 'produtoNome', 'valor', 'produtoStatus']

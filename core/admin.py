@@ -1,11 +1,7 @@
 from django.contrib import admin
+from .models import UserProfile, Produto
 
-from .models import Usuario, Produto
-
-
-@admin.register(Usuario)
-class UsuarioAdmin(admin.ModelAdmin):
-    list_display = ('usuarioNome', 'usuarioEmail', 'usuarioStatus')
+admin.site.register(UserProfile)
 
 
 @admin.register(Produto)
