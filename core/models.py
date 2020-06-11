@@ -17,6 +17,7 @@ class Produto(models.Model):
     produtoNome = models.CharField('Produto', max_length=32, blank='false')
     valor = models.DecimalField('Valor', max_digits=8, decimal_places=2)
     produtoStatus = models.BooleanField('Produto ativo', default='true')
+    produtoDescricao = models.CharField('Descrição', max_length=320, default='')
 
     class Meta:
         verbose_name = 'Produto'

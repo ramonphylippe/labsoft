@@ -6,7 +6,7 @@ from core.models import Produto as produtoModel
 # retorna todos os produtos ativos
 def getProdutos():
     data = produtoModel.objects.filter(produtoStatus='True')
-    data_list = serializers.serialize("json", data, fields=('produtoNome', 'valor'))
+    data_list = serializers.serialize("json", data, fields=('produtoNome', 'valor', 'produtoDescricao'))
 
     return HttpResponse(data_list)
 
@@ -14,7 +14,7 @@ def getProdutos():
 # retorna os produtos do usuario
 def getProdutosById(idFromToken):
     data = produtoModel.objects.filter(vendedor_id=idFromToken, produtoStatus='True')
-    data_list = serializers.serialize("json", data, fields=('id', 'vendedor', 'produtoNome', 'valor'))
+    data_list = serializers.serialize("json", data, fields=('id', 'vendedor', 'produtoNome', 'valor', 'produtoDescricao'))
 
     return HttpResponse(data_list)
 
@@ -23,7 +23,7 @@ def getProdutosById(idFromToken):
 # não tem uso ainda
 def getProdutosByIdAndDisabled(idFromToken):
     data = produtoModel.objects.filter(vendedor_id=idFromToken, produtoStatus='False')
-    data_list = serializers.serialize("json", data, fields=('id', 'vendedor', 'produtoNome', 'valor', 'produtoStatus'))
+    data_list = serializers.serialize("json", data, fields=('id', 'vendedor', 'produtoNome', 'valor', 'produtoDescricao'))
 
     return HttpResponse(data_list)
 
