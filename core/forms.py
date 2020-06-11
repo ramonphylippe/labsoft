@@ -31,11 +31,11 @@ class UserProfileForm(forms.ModelForm):
         fields = ('telefone', 'cep')
 
 
-class ProdutoForm(forms.Form):
-    vendedor = forms.CharField(label='idVendedor')
-    nome = forms.CharField(label='nome')
-    valor = forms.CharField(label='valor')
-    status = forms.CharField(label='status')
+# class ProdutoForm(forms.Form):
+#     vendedor = forms.CharField(label='idVendedor')
+#     nome = forms.CharField(label='nome')
+#     valor = forms.CharField(label='valor')
+#     status = forms.CharField(label='status')
 
 
 class ProdutoModelForm(forms.ModelForm):
@@ -43,3 +43,11 @@ class ProdutoModelForm(forms.ModelForm):
     class Meta:
         model = Produto
         fields = ['vendedor', 'produtoNome', 'valor', 'produtoStatus']
+
+
+class ProdutoModelFormEdit(forms.ModelForm):
+
+    class Meta:
+        model = Produto
+        fields = ('produtoNome', 'valor')
+

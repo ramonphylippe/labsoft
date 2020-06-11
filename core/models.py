@@ -14,7 +14,7 @@ class UserProfile(models.Model):
 
 class Produto(models.Model):
     vendedor = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    produtoNome = models.CharField('Produto', max_length=16, blank='false')
+    produtoNome = models.CharField('Produto', max_length=32, blank='false')
     valor = models.DecimalField('Valor', max_digits=8, decimal_places=2)
     produtoStatus = models.BooleanField('Produto ativo', default='true')
 

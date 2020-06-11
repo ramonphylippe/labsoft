@@ -1,11 +1,10 @@
-from django.contrib.auth.decorators import login_required
-from .models import Produto
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.models import Group
-from core.forms import ProdutoModelForm, UserProfileForm, ExtendedUserCreationForm
+from core.models import Produto
+from core import forms
 from core.recursos import tokenJwt
 from core.Objetos import MProdutos
 
@@ -16,8 +15,8 @@ def index(request):
 
 @require_http_methods(["POST"])
 def cadastrarusuario(request):
-    form = ExtendedUserCreationForm(request.POST)
-    profile_form = UserProfileForm(request.POST)
+    form = forms.ExtendedUserCreationForm(request.POST)
+    profile_form = forms.UserProfileForm(request.POST)
     if form.is_valid() and profile_form.is_valid():
         user = form.save()
 
@@ -61,27 +60,47 @@ def getProdutosDoUsuario(request):
 @require_http_methods(["POST"])
 def putproduto(request):
     if ('jwtToken' in request.headers) and (tokenJwt.checkTokenValidation(request.headers['jwtToken'])):
-        form = ProdutoModelForm(request.POST or None)
+        form = forms.ProdutoModelForm(request.POST or None)
         if form.is_valid():
             form.save()
             print("Formulario correto\nProduto cadastrado corretamente")
             return HttpResponse(status=200)
         else:
-            print("Formulario incorreto")
+            print("Formulario incorreto\nProduto não foi cadastrado")
             print(form.fields)
             return HttpResponse(status=406)
     else:
-        print("Não Aceitavel")
+        print("Requisição não aceitavel")
         return HttpResponse(status=406)
 
 
 @csrf_exempt
 @require_http_methods(["POST"])
-def updateproduto(request):
-    if ('jwtToken' in request.headers) and ('idDoProduto' in request.headers) and ('produtoNome' in request.headers) \
-            and ('valor' in request.headers) and tokenJwt.checkTokenValidation(request.headers['jwtToken']):
+def editproduto(request):
+    if ('jwtToken' in request.headers) and (tokenJwt.checkTokenValidation(request.headers['jwtToken'])):
+        item = Produto.objects.get(pk=request.headers['idDoProduto'])
+        form = forms.ProdutoModelFormEdit(request.POST)
+        if form.is_valid():
 
-        atualizado = MProdutos.updateProdutoAtributos(request.headers['idDoProduto'], request.headers['produtoNome'], request.headers['valor'])
+            form = forms.ProdutoModelFormEdit(request.POST, instance=item)
+            form.save()
+            msg = "Formulario correto\nProduto atualizado corretamente"
+            print(msg)
+            return HttpResponse(msg, status=200)
+        else:
+            msg = "Formulario incorreto\nProduto não foi atualizado"
+            print(msg, "\n", form.errors)
+            return HttpResponse(msg, status=406)
+    return HttpResponse("Token ou usuario invalido", status=406)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+# produtos não são deletados, seu status passa para false
+def deleteproduto(request):
+    sucesso = bool(False)
+    if ('jwtToken' in request.headers) and (tokenJwt.checkTokenValidation(request.headers['jwtToken'])):
+        sucesso = MProdutos.deletarProduto(request.headers['idDoProduto'], tokenJwt.getIdFromToken(request.headers['jwtToken']))
     else:
-        atualizado = bool(False)
-    return HttpResponse(status=200) if atualizado else HttpResponse(status=406)
+        return HttpResponse("Token ou usuario invalido", status=406)
+    return HttpResponse(status=200) if sucesso else HttpResponse("Não foi possivel realizar a operação", status=400)

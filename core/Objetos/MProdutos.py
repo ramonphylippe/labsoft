@@ -13,7 +13,7 @@ def getProdutos():
 
 # retorna os produtos do usuario
 def getProdutosById(idFromToken):
-    data = produtoModel.objects.filter(vendedor_id=idFromToken)
+    data = produtoModel.objects.filter(vendedor_id=idFromToken, produtoStatus='True')
     data_list = serializers.serialize("json", data, fields=('id', 'vendedor', 'produtoNome', 'valor'))
 
     return HttpResponse(data_list)
@@ -28,18 +28,9 @@ def getProdutosByIdAndDisabled(idFromToken):
     return HttpResponse(data_list)
 
 
-# ta bugado
-def updateProdutoAtributos(idProduto, novoProdutoNome, novoValor):
+def deletarProduto(idProduto, idFromToken):
     try:
-        nomeDaTreta = produtoModel.objects.filter(pk=idProduto)
-        nomeDaTreta.produtoNome = novoProdutoNome
-        nomeDaTreta.valor = novoValor
-        nomeDaTreta.save()
-        # nomeDaTreta.save(produtoNome=novoProdutoNome, valor=novoValor)
+        produtoModel.objects.filter(pk=idProduto, vendedor_id=idFromToken).update(produtoStatus=False)
         return bool(True)
-    except Exception:
-        print("não foi possivel atualizar produto")
+    except:
         return bool(False)
-
-class verificarProdutoDoDono():
-    pass
