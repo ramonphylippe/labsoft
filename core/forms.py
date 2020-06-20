@@ -42,7 +42,7 @@ class ProdutoModelForm(forms.ModelForm):
 
     class Meta:
         model = Produto
-        fields = ['vendedor', 'produtoNome', 'valor', 'produtoStatus', 'produtoDescricao']
+        fields = ['vendedor', 'produtoNome', 'valor', 'produtoStatus', 'produtoDescricao', 'produtoImagem']
 
 
 class ProdutoModelFormEdit(forms.ModelForm):

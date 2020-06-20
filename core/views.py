@@ -12,7 +12,7 @@ from core.Objetos import MProdutos
 def index(request):
     return render(request, 'index.html')
 
-
+@csrf_exempt
 @require_http_methods(["POST"])
 def cadastrarusuario(request):
     form = forms.ExtendedUserCreationForm(request.POST)
@@ -66,8 +66,7 @@ def putproduto(request):
             print("Formulario correto\nProduto cadastrado corretamente")
             return HttpResponse(status=200)
         else:
-            print("Formulario incorreto\nProduto não foi cadastrado")
-            print(form.fields)
+            print("Formulario incorreto\nProduto não foi cadastrado: ", form.errors)
             return HttpResponse(status=406)
     else:
         print("Requisição não aceitavel")
